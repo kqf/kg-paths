@@ -5,7 +5,7 @@ Predict a smooth path between the given two nodes in a graph.
 
 ## Dataset
 
-The dataset is `yoochoose` dataset that contains user sessions. It is available on kaggle.
+The dataset is `yoochoose` (RecSys15 challenge). It contains the history sessions (clicks) on the e-commerce platform. It is available on kaggle.
 In order to download one needs to accept the rules on kaggle and place kaggle API token file in your home directory (as mentioned in their docs `~/.kaggle/kaggle.json`).
 
 Use this command to download the data (or do it manually, no token required)
