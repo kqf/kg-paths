@@ -1,0 +1,10 @@
+*.pyc
+*.zip
+*.python-version
+*.dat
+*.txt
+
+
+*.egg*
+.coverage
+*sftp-config.json*
