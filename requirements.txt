@@ -1,0 +1,11 @@
+pytest
+pytest-cov
+kaggle
+click
+pandas
+torch
+torchtext
+scikit-learn
+skorch
+ir-metrics
+networkx
