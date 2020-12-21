@@ -1,3 +1,8 @@
+
+baseline: data/processed
+	python models/baseline.py
+
+
 data/processed: data/
 	python models/data.py --raw $^ --out $@
 	@echo "Training dataset:"
