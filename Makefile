@@ -1,4 +1,8 @@
 
+main: data/processed
+	python models/main.py
+
+
 baseline: data/processed
 	python models/baseline.py
 

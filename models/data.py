@@ -5,6 +5,8 @@ import datetime
 import numpy as np
 import pandas as pd
 
+from irmetrics.topk import recall, rr
+
 
 def read_data(raw):
     path = pathlib.Path(raw)
@@ -12,6 +14,49 @@ def read_data(raw):
         pd.read_csv(path / 'train.txt', names=["text"]),
         pd.read_csv(path / 'valid.txt', names=["text"]),
     )
+
+
+def split(x):
+    return [(x[:i + 1], x[i + 1]) for i in range(len(x) - 1)]
+
+
+def flatten(dataset):
+    """ Converts the dataset to the "next token prediction" format:
+
+        for the input string:
+            text
+            [token1, token2, token3, token4]
+
+        will be converted to the following examples:
+
+            text      gold
+            [token1], [token2]
+            [token1, token2], [token3]
+            [token1, token2, token3], [token4]
+
+        This is helpful when you are trying to predict the next token
+    """
+    dataset = dataset.str.split()
+
+    dataset = dataset[dataset.str.len() > 1].reset_index(drop=True)
+    data = pd.DataFrame({"session_id": dataset.index})
+    data["splitted"] = dataset.apply(split)
+    exploded = data.explode("splitted")
+    exploded["text"] = exploded["splitted"].str[0]
+    exploded["gold"] = exploded["splitted"].str[1]
+    return exploded.drop(columns=["splitted"])
+
+
+def evaluate(model, data, title):
+    predicted = model.predict(data)
+
+    data["recall"] = recall(data["gold"], predicted)
+    data["rr"] = rr(data["gold"], predicted)
+
+    print("Evaluating on", title)
+    print("Recall", data["recall"].mean())
+    print("MRR", data["rr"].mean())
+    return data
 
 
 def read_file(path, filename, frac=None):
